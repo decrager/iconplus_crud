@@ -1,5 +1,11 @@
 <?php
 
+require('./sheet/vendor/autoload.php');
+
+use PhpOffice\PhpSpreadsheet\Helper\Sample;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+
 class Keuangan extends CI_Controller {
 
 	public function __construct()
@@ -80,5 +86,53 @@ class Keuangan extends CI_Controller {
 		$where	= array('id' => $id);
 		$this->Keuangan_m->deleteData($where, 'keuangan');
 		redirect('keuangan/index');
+	}
+
+	public function export()
+	{
+		$keuangan	= $this->Keuangan_m->getData()->result();
+		$spreadsheet = new Spreadsheet();
+
+		$spreadsheet->getProperties()->setCreator('Kelompok 7')
+		->setLastModifiedBy('Kelompok 7 - Icon Plus')
+		->setTitle('Laporan Keuangan Icon Plus')
+		->setSubject('Pelaporan excel')
+		->setDescription('Generate laporan excel dari websote')
+		->setKeywords('excel openxml php')
+		->setCategory('Test result file');
+
+		$spreadsheet->setActiveSheetIndex(0)
+		->setCellValue('A1', 'ID')
+		->setCellValue('A1', 'Jenis')
+		->setCellValue('C1', 'Jumlah')
+		;
+
+		$i=2; foreach($keuangan as $data) {
+
+		$spreadsheet->setActiveSheetIndex(0)
+		->setCellValue('A'.$i, $data->id)
+		->setCellValue('B'.$i, $data->jenis)
+		->setCellValue('C'.$i, $data->jumlah);
+		$i++;
+		}
+
+		$spreadsheet->getActiveSheet()->setTitle('Laporan keuangan '.date('d-m-Y H'));
+		$spreadsheet->setActiveSheetIndex(0);
+
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment;filename="Laporan Layanan Icon Plus.xlsx"');
+		header('Cache-Control: max-age=0');
+		header('Cache-Control: max-age=1');
+		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
+		header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT'); // always modified
+		header('Cache-Control: cache, must-revalidate'); // HTTP/1.1
+		header('Pragma: public'); // HTTP/1.0
+
+
+		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+		$writer->save('php://output');
+		exit;
+		
+		
 	}
 }
