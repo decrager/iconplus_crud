@@ -113,7 +113,7 @@
 								<div class="dropdown no-arrow">
 									<div class="d-flex justify-content-center my-2">
 										<a href="<?php echo base_url('aset/export') ?>" class="btn btn-success m-2" onclick="alertAset()">Export Excel</a>
-										<a href="laporan_jumlah_aset.php" class="btn btn-danger m-2" target="_blank">Export PDF</a>
+										<a href="<?php echo base_url('aset/pdf') ?>" class="btn btn-danger m-2">Export PDF</a>
 									</div>
 								</div>
 							</div>
@@ -135,7 +135,7 @@
 								<div class="dropdown no-arrow">
 									<div class="d-flex justify-content-center my-2">
 										<a href="<?php echo base_url('layanan/export') ?>" class="btn btn-success m-2" onclick="alertAset()">Export Excel</a>
-										<a href="laporan_layanan.php" class="btn btn-danger m-2" target="_blank">Export PDF</a>
+										<a href="<?php echo base_url('layanan/pdf') ?>" class="btn btn-danger m-2">Export PDF</a>
 									</div>
 								</div>
 							</div>
@@ -156,8 +156,8 @@
 								<h6 class="m-0 font-weight-bold text-primary">Keuangan Tahunan</h6>
 								<div class="dropdown no-arrow">
 									<div class="d-flex justify-content-center my-2">
-										<a href="<?php echo base_url('aset/export') ?>" class="btn btn-success m-2" onclick="alertAset()">Export Excel</a>
-										<a href="laporan_keuangan_tahunan.php" class="btn btn-danger m-2" target="_blank">Export PDF</a>  
+										<a href="<?php echo base_url('keuangan/export') ?>" class="btn btn-success m-2" onclick="alertAset()">Export Excel</a>
+										<a href="<?php echo base_url('keuangan/pdf') ?>" class="btn btn-danger m-2">Export PDF</a>  
 									</div>
 								</div>
 							</div>

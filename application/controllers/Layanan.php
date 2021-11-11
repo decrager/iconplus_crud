@@ -96,7 +96,7 @@ class Layanan extends CI_Controller {
 
 		$spreadsheet->setActiveSheetIndex(0)
 		->setCellValue('A1', 'ID')
-		->setCellValue('A1', 'Jenis')
+		->setCellValue('B1', 'Jenis')
 		->setCellValue('C1', 'Jumlah')
 		;
 
@@ -126,7 +126,22 @@ class Layanan extends CI_Controller {
 		$writer->save('php://output');
 		exit;
 		
+	}
+
+	public function pdf()
+	{
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        $this->load->library('pdfgenerator');
 		
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan layanan icon plus pdf';
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "portrait";
+		$data['layanan']	= $this->Layanan_m->getData()->result();
+		$html				= $this->load->view('layanan/layanan_pdf', $data, true);
+		$this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
 	}
 
 }

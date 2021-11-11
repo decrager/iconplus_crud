@@ -103,16 +103,20 @@ class Keuangan extends CI_Controller {
 
 		$spreadsheet->setActiveSheetIndex(0)
 		->setCellValue('A1', 'ID')
-		->setCellValue('A1', 'Jenis')
-		->setCellValue('C1', 'Jumlah')
+		->setCellValue('B1', 'Tahun')
+		->setCellValue('C1', 'Pendapatan')
+		->setCellValue('D1', 'Pengeluaran')
+		->setCellValue('E1', 'Laba')
 		;
 
 		$i=2; foreach($keuangan as $data) {
 
 		$spreadsheet->setActiveSheetIndex(0)
 		->setCellValue('A'.$i, $data->id)
-		->setCellValue('B'.$i, $data->jenis)
-		->setCellValue('C'.$i, $data->jumlah);
+		->setCellValue('B'.$i, $data->tahun)
+		->setCellValue('C'.$i, $data->pendapatan)
+		->setCellValue('D'.$i, $data->pengeluaran)
+		->setCellValue('E'.$i, $data->laba);
 		$i++;
 		}
 
@@ -120,7 +124,7 @@ class Keuangan extends CI_Controller {
 		$spreadsheet->setActiveSheetIndex(0);
 
 		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename="Laporan Layanan Icon Plus.xlsx"');
+		header('Content-Disposition: attachment;filename="Laporan Keuangan Icon Plus.xlsx"');
 		header('Cache-Control: max-age=0');
 		header('Cache-Control: max-age=1');
 		header('Expires: Mon, 26 Jul 1997 05:00:00 GMT'); // Date in the past
@@ -132,7 +136,22 @@ class Keuangan extends CI_Controller {
 		$writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 		$writer->save('php://output');
 		exit;
+
+	}
+
+	public function pdf()
+	{
+		// panggil library yang kita buat sebelumnya yang bernama pdfgenerator
+        $this->load->library('pdfgenerator');
 		
-		
+        // filename dari pdf ketika didownload
+        $file_pdf = 'laporan keuangan icon plus pdf';
+        // setting paper
+        $paper = 'A4';
+        //orientasi paper potrait / landscape
+        $orientation = "portrait";
+		$data['keuangan']	= $this->Keuangan_m->getData()->result();
+		$html				= $this->load->view('keuangan/keuangan_pdf', $data, true);
+		$this->pdfgenerator->generate($html, $file_pdf, $paper, $orientation);
 	}
 }
